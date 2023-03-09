@@ -1,28 +1,29 @@
 import * as vscode from 'vscode';
-import fs = require('fs');
 
 export function activate(context: vscode.ExtensionContext) {
 	let disposable = vscode.commands.registerCommand('extensionForMarkGrade.openPage',
 		() => {
-		
 			const panel = vscode.window.createWebviewPanel(
 				'helloWebView', // Identifies the type of the webview. Used internally
 				'成绩批改', // Title of the panel displayed to the user
 				vscode.ViewColumn.Two, // Editor column to show the new webview panel in.
 				{
-					enableScripts:true
+					enableScripts: true
 				} // Webview options. More on these later.
-			  );
-			panel.webview.html = getWebviewContent();
-
-	});
+			);
+			vscode.workspace.textDocuments.forEach(item => {
+				console.log(item.uri.path);
+			});
+			// console.log(vscode.workspace.workspaceFolders);
+			panel.webview.html = getWebviewContent(vscode.workspace.textDocuments[0].uri.path);
+		});
 
 	context.subscriptions.push(disposable);
 }
 
-export function deactivate() {}
+export function deactivate() { }
 
-function getWebviewContent(): string {
+function getWebviewContent(item: string): string {
 	return `<!DOCTYPE html>
 	<html lang="en">
 		<head>
@@ -32,6 +33,9 @@ function getWebviewContent(): string {
 		</head>
 		<body>
 			<div>
+			<div>
+				${item}
+			</div>
 				<div>
 					批改
 				</div>
