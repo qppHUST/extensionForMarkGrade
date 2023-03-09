@@ -11,8 +11,12 @@ export function activate(context: vscode.ExtensionContext) {
 					enableScripts: true
 				} // Webview options. More on these later.
 			);
-			vscode.workspace.textDocuments.forEach(item => {
-				console.log(item.uri.path);
+			vscode.workspace.onDidOpenTextDocument((e) => {
+				console.log(e);
+			});
+			vscode.workspace.onDidChangeTextDocument((e) => {
+				console.log('changed');
+				console.log(e);
 			});
 			// console.log(vscode.workspace.workspaceFolders);
 			panel.webview.html = getWebviewContent(vscode.workspace.textDocuments[0].uri.path);
